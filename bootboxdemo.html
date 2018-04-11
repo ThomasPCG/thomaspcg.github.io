@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Bootbox Custom Dialog Issues Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="container" style="margin-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <p>I've created a custom dialog using bootbox that hides on clicking save and appends a "Successful"
+                                paragrpah below the button. However, it seems that custom bootbox dialog's callback button
+                                doesn't trigger the subsequent times unless I create a new instance of it everytime. It could
+                                be a problem because I'm integrating the content with vue and I cannot create and attach
+                                dynamic html components with vue.js.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button id="dialogBtn" class="btn btn-primary">Open Dialog</button>
+                </div>
+                <div id="log"></div>
+            </div>
+        </div>
+    </div>
+    <div class="hide">
+        <div id="customDialogContent">
+            <p>Nam vitae arcu eros. Sed blandit quis ante vel aliquet. Nullam hendrerit interdum nibh, in varius est malesuada
+                ut. Vivamus malesuada porttitor dapibus. Vivamus pretium ex vitae ligula lacinia malesuada. Proin suscipit
+                libero vestibulum nisl vehicula sagittis. Maecenas congue metus tincidunt velit convallis, nec porttitor
+                elit ultrices. In commodo, dolor lacinia tincidunt luctus, eros odio maximus ligula, vitae ullamcorper libero
+                velit ac risus. Donec pulvinar congue purus et interdum. Aenean ut semper elit, id pellentesque sem. Vestibulum
+                ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script>
+        var myDialog = null;
+
+        function postDialog() {
+            $("#log").append("<p>Successful</p>");
+        }
+
+        function showDialog() {
+            if (myDialog === null) {
+                myDialog = bootbox.dialog({
+                    title: "Bootbox Modal",
+                    message: $("#customDialogContent")[0],
+                    className: "custom-dialog",
+                    onEscape: true,
+                    buttons: {
+                        cancel: {
+                            label: 'Cancel',
+                            className: 'btn-warning'
+                        },
+                        confirm: {
+                            label: 'Save',
+                            className: 'btn-primary',
+                            callback: function () {
+                                postDialog();
+                            }
+                        }
+                    }
+                });
+            } else {
+                myDialog.modal('show');
+            }
+        }
+
+        $(document).on('click', '#dialogBtn', function () {
+            showDialog();
+        });
+    </script>
+</body>
+
+</html>
