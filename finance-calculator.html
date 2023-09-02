@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Financial Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="./css/global.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app" class="container main-container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div>
+                    <h5>Income</h5>
+                    <currency-input labeltext="Annual Salary:" field="annualSalary" :value="taxForm.annualSalary"
+                        @input="updateField"></currency-input>
+                    <currency-input labeltext="Additional Wages / Bonus:" field="annualBonus"
+                        :value="taxForm.annualBonus" @input="updateField"></currency-input>
+                    <hr />
+                    <currency-input labeltext="Annual Total Income:" field="annualIncome" :value="taxForm.annualIncome"
+                        readonly="true" @input="updateField"></currency-input>
+                    <hr />
+                </div>
+                <div>
+                    <h5>Deductions</h5>
+                    <currency-input labeltext="My Total Deductions:" field="deductions" :value="taxForm.deductions"
+                        @input="updateField"></currency-input>
+                    <hr />
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-sm" @click="calculateTax()">Calculate</button>
+                        </div>
+                        <h5>Result</h5>
+                    </div>
+                    <div class="form-group">
+                        <ul class="list-group" v-if="(taxForm.incomeTaxTier != null)">
+                            <li class="list-group-item">Your tax bracket base is
+                                <strong
+                                    v-text="`${taxForm.currency} ${formatCurrency(taxForm.incomeTaxTier.income)}`"></strong>
+                            </li>
+                            <li class="list-group-item">Your total tax payable is
+                                <strong v-text="`${taxForm.currency} ${formatCurrency(taxForm.taxpayable)}`"></strong>
+                            </li>
+                            <li class="list-group-item">Your effective tax is <strong v-text="taxForm.eir"></strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://unpkg.com/browse/lodash@4.17.21/lodash.min.js"
+        integrity="sha512-gZBwkdOcGulKAVIPvaPji1OYx67yd5M4WyYNwT0kO3mYxrumiUHq7+5v56hW+DfgDgb3ZEXfooTCdqy0Tv3zVQ=="
+        crossorigin="anonymous"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/numeral@2.0.6/min/numeral.min.js"></script>
+    <script src="./js/tax.js"></script>
+    <script src="./js/currency-input.js"></script>
+    <script>
+        let app;
+
+        const taxCalculator = new TaxCalculator();
+
+        const taxFormTemplate = function () {
+            return {
+                annualSalary: 0,
+                annualBonus: 0,
+                annualIncome: 0,
+                deductions: 0,
+                taxpayable: 0,
+                currency: 'SGD',
+                incomeTaxTier: null,
+                eir: 0
+            };
+        };
+
+        const init = function () {
+            app = new Vue({
+                el: '#app',
+                data: {
+                    taxForm: taxFormTemplate()
+                },
+                methods: {
+                    updateField: function (payload) {
+                        this.taxForm[payload.field] = payload.value;
+
+                        //Special Case
+                        if (payload.field === 'annualSalary' || payload.field === 'annualBonus') {
+                            this.taxForm.annualIncome = this.taxForm.annualSalary + this.taxForm.annualBonus;
+                        }
+
+                    },
+                    formatCurrency: function (v) {
+                        return numeral(v).format(currencyFmt);
+                    },
+                    calculateTax: function () {
+
+                        let grossIncome = this.taxForm.annualIncome;
+                        let grossDeductions = this.taxForm.deductions;
+
+                        try {
+                            let nettincome = numeral(grossIncome).value() - numeral(grossDeductions).value();
+                            nettincome = parseFloat(nettincome);
+                            let result = taxCalculator.calculateTax(numeral(grossIncome).value(), nettincome);
+
+                            //Set result
+                            this.taxForm.incomeTaxTier = result.incomeTaxTier;
+                            this.taxForm.taxpayable = result.taxpayable;
+                            this.taxForm.eir = result.eir;
+
+                        } catch (e) {
+                            this.taxForm = taxFormTemplate();
+                        }
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            init();
+        });
+    </script>
+</body>
+
+</html>
