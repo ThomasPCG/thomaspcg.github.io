@@ -1,0 +1,335 @@
+/**
+ * styles/main.css
+ *
+ * Global tokens and utilities. Everything else is scoped to its component.
+ *
+ * Vuetify 4 puts its CSS in @layers (order declared in public/layers.css), and
+ * un-layered CSS always beats layered CSS, so the rules below override Vuetify
+ * without !important. The flip side: a low-specificity global element rule
+ * (e.g. `button {}`) would also beat Vuetify, so element resets are kept minimal.
+ *
+ * Utilities
+ *   Type     .t-display (.t-display--page) .t-h2 .t-h3 .t-label .t-lead .t-mono
+ *   Colour   .muted .dim .accent
+ *   Layout   .wrap .grid-12 .rule .section .measure .sr-only
+ *   Links    .link-u
+ *   Motion   v-reveal (.reveal/.is-in), <Transition name="page">
+ */
+
+:root {
+  --bg: #0d0d0c;
+  --bg-raise: #141412;
+  --fg: #ece7dd;
+  --fg-muted: #9a958b;
+  --fg-dim: #5f5b54;
+  --line: rgba(236, 231, 221, 0.1);
+  --line-strong: rgba(236, 231, 221, 0.22);
+  --accent: #2d56db;
+  --accent-soft: rgba(255, 91, 46, 0.14);
+
+  --font-sans: 'Montserrat Variable', system-ui, sans-serif;
+  --font-serif: 'Caveat', Georgia, serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --gutter: clamp(20px, 4vw, 56px);
+  --maxw: 1360px;
+  --header-h: 72px;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------- base */
+
+html {
+  background: var(--bg);
+  font-family: var(--font-sans);
+  scrollbar-color: var(--fg-dim) var(--bg);
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+.v-application {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+:where(h1, h2, h3, h4, p, ul, ol, figure, blockquote, dl, dd) {
+  margin: 0;
+}
+
+a:not(.v-btn) {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: #0d0d0c;
+}
+
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Film grain. A noise tile is painted on a canvas at startup (see makeGrain in
+   main.ts) and exposed as --grain. Static, fixed and inert, so it never repaints.
+   The tile is per-pixel random noise with balanced light and dark specks, so it
+   has no visible edge and does not lift the background. Kept faint: flat areas
+   should read as clean ink, not grit. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: var(--grain, none);
+  background-size: 160px 160px;
+  background-repeat: repeat;
+}
+
+/* ---------------------------------------------------------- typography */
+
+.t-display,
+.t-h2,
+.t-h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.t-display {
+  font-size: clamp(3.25rem, 9vw, 9.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+
+/* Inner-page variant: Work index, About, 404 */
+.t-display--page {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+}
+
+.t-h2 {
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.t-h3 {
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.t-display em,
+.t-h2 em,
+.t-h3 em {
+  font-style: italic;
+}
+
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-lead {
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+.muted {
+  color: var(--fg-muted);
+}
+
+.dim {
+  color: var(--fg-dim);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.measure {
+  max-width: 60ch;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -------------------------------------------------------------- layout */
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(16px, 2vw, 32px);
+}
+
+@media (max-width: 759.98px) {
+  .grid-12 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.rule {
+  border-top: 1px solid var(--line);
+}
+
+.section {
+  padding-block: clamp(96px, 14vw, 200px);
+}
+
+/* ---------------------------------------------------------------- links */
+
+.link-u {
+  padding-bottom: 0.12em;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--ease);
+}
+
+.link-u:hover,
+.link-u:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ------------------------------------------------------------- buttons
+   Vuetify's v-btn restyled as a small mono label in a square outline. */
+
+.v-btn {
+  --v-btn-height: 48px;
+  padding: 0 24px;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+
+.v-btn--variant-outlined {
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+}
+
+.v-btn--variant-outlined:hover,
+.v-btn--variant-outlined:focus-visible {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.v-btn--variant-text {
+  min-width: 0;
+  padding: 0;
+  color: var(--fg-muted);
+}
+
+.v-btn--variant-text:hover,
+.v-btn--variant-text:focus-visible {
+  color: var(--fg);
+}
+
+/* The fill transition replaces Vuetify's state overlay. */
+.v-btn .v-btn__overlay,
+.v-btn .v-btn__underlay {
+  display: none;
+}
+
+/* --------------------------------------------------------------- motion */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 900ms var(--ease) var(--d, 0ms),
+    transform 900ms var(--ease) var(--d, 0ms);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* <router-view> page transition: fade out, then fade in with a 12px rise. */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 300ms var(--ease),
+    transform 300ms var(--ease);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .page-enter-from {
+    transform: none;
+  }
+}
