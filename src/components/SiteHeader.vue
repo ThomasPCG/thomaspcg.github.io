@@ -6,6 +6,7 @@
    */
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
+  import ThemeToggle from '@/components/ThemeToggle.vue'
   import { site } from '@/data/content'
 
   const route = useRoute()
@@ -73,37 +74,41 @@
         <span class="brand__loc">/ SG</span>
       </RouterLink>
 
-      <nav aria-label="Primary" class="nav">
-        <RouterLink
-          v-for="item in nav"
-          :key="item.label"
-          custom
-          :to="item.to"
-        >
-          <template #default="{ href, navigate }">
-            <a
-              :aria-current="isCurrent(item) ? 'page' : undefined"
-              class="nav__link"
-              :class="{ 'is-current': isCurrent(item) }"
-              :href="href"
-              @click="navigate"
-            >
-              <span class="nav__idx">{{ item.index }}</span>
-              <span class="nav__label link-u">{{ item.label }}</span>
-            </a>
-          </template>
-        </RouterLink>
-      </nav>
+      <div class="site-header__end">
+        <nav aria-label="Primary" class="nav">
+          <RouterLink
+            v-for="item in nav"
+            :key="item.label"
+            custom
+            :to="item.to"
+          >
+            <template #default="{ href, navigate }">
+              <a
+                :aria-current="isCurrent(item) ? 'page' : undefined"
+                class="nav__link"
+                :class="{ 'is-current': isCurrent(item) }"
+                :href="href"
+                @click="navigate"
+              >
+                <span class="nav__idx">{{ item.index }}</span>
+                <span class="nav__label link-u">{{ item.label }}</span>
+              </a>
+            </template>
+          </RouterLink>
+        </nav>
 
-      <v-btn
-        aria-controls="site-drawer"
-        :aria-expanded="drawer"
-        class="menu-btn"
-        variant="text"
-        @click="drawer = true"
-      >
-        Menu
-      </v-btn>
+        <ThemeToggle />
+
+        <v-btn
+          aria-controls="site-drawer"
+          :aria-expanded="drawer"
+          class="menu-btn"
+          variant="text"
+          @click="drawer = true"
+        >
+          Menu
+        </v-btn>
+      </div>
     </div>
   </header>
 
@@ -182,6 +187,13 @@
   height: 100%;
 }
 
+/* Nav, theme toggle and mobile menu button share the right-hand side. */
+.site-header__end {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 3.4vw, 52px);
+}
+
 /* ---------------------------------------------------------------- brand */
 .brand {
   display: inline-flex;
@@ -247,6 +259,10 @@
 }
 
 @media (max-width: 759.98px) {
+  .site-header__end {
+    gap: 0;
+  }
+
   .nav {
     display: none;
   }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useTheme } from 'vuetify'
 
 // Hero visual: a circuit-like dataflow lattice. Nodes sit on a square grid
 // whose tracks are nudged by a few percent (so spacing is uneven but every
@@ -158,6 +159,24 @@ function buildStyles(fg: RGB, accent: RGB) {
     pulseLevels.push(rgba(accent, PULSE_MAX_ALPHA * (i / (PULSE_LEVELS - 1))))
   }
 }
+
+// Colours come from the page's --fg and --accent tokens, so they follow the theme.
+function readColors() {
+  const root = rootEl.value
+  if (!root) return
+  const cs = getComputedStyle(root)
+  buildStyles(
+    parseColor(cs.getPropertyValue('--fg'), FG_FALLBACK),
+    parseColor(cs.getPropertyValue('--accent'), ACCENT_FALLBACK),
+  )
+}
+
+// After the DOM has switched theme: re-read the tokens. A running loop picks the new
+// styles up on its next frame; a paused one (reduced motion, off screen) needs a repaint.
+watch(useTheme().name, () => {
+  readColors()
+  if (ctx && !raf) draw()
+}, { flush: 'post' })
 
 function connect(a: Node, b: Node) {
   const e: Edge = { a, b }
@@ -533,11 +552,7 @@ onMounted(() => {
   if (!c) return
   ctx = c
 
-  const cs = getComputedStyle(root)
-  buildStyles(
-    parseColor(cs.getPropertyValue('--fg'), FG_FALLBACK),
-    parseColor(cs.getPropertyValue('--accent'), ACCENT_FALLBACK),
-  )
+  readColors()
 
   const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)')
   const fineMq = window.matchMedia('(pointer: fine)')

@@ -138,7 +138,7 @@
   align-items: baseline;
   gap: 0.2em;
   max-width: 100%;
-  font-size: clamp(1.25rem, 6vw, 1.5rem);
+  font-size: clamp(0.8rem, 3vw, 1.5rem);
   font-weight: 300;
   line-height: 1.3;
   letter-spacing: -0.01em;

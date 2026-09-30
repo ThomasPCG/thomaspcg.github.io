@@ -7,12 +7,16 @@
  * so the un-layered rules in src/styles/main.css win without !important.
  */
 
+import { watch } from 'vue'
 import { createVuetify } from 'vuetify'
 import 'vuetify/styles'
+import { applyColorMode, initialColorMode, modeFor, themeNameFor } from '@/composables/useColorMode'
 
-export default createVuetify({
+const initial = initialColorMode()
+
+const vuetify = createVuetify({
   theme: {
-    defaultTheme: 'ink',
+    defaultTheme: themeNameFor(initial),
     themes: {
       ink: {
         dark: true,
@@ -25,9 +29,27 @@ export default createVuetify({
           'on-primary': '#0d0d0c',
         },
       },
+      paper: {
+        dark: false,
+        colors: {
+          'background': '#eeeae1',
+          'surface': '#f7f4ee',
+          'primary': '#ff5b2e',
+          'on-background': '#14130f',
+          'on-surface': '#14130f',
+          'on-primary': '#0d0d0c',
+        },
+      },
     },
   },
   defaults: {
     VBtn: { rounded: 0, ripple: false, variant: 'outlined' },
   },
 })
+
+// Keep <html data-theme> in step with the active theme. The watcher is sync so the
+// change lands inside Vuetify's view-transition update callback, not a frame after it.
+applyColorMode(initial)
+watch(vuetify.theme.name, name => applyColorMode(modeFor(name)), { flush: 'sync' })
+
+export default vuetify

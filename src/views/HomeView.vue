@@ -27,7 +27,7 @@
       <!-- The anchor starts a little above the rule, so `/#work` leaves air under the header. -->
       <div id="work" class="wrap home__anchor">
         <SectionHead index="01" :meta="workMeta" title="Selected work">
-          Four projects where the <em>logic</em> mattered.
+          Projects where the <em>logic</em> mattered.
         </SectionHead>
 
         <LeadProject v-if="lead" index="01" :project="lead" />

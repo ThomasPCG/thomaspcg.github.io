@@ -207,10 +207,10 @@ export const about = {
         { years: '2016 — 2019', role: 'Web Developer', context: 'Digital studio' },
     ],
     toolkit: [
-        { group: 'Languages', items: ['TypeScript', 'JavaScript', 'SQL', 'Python'] },
+        { group: 'Languages', items: ['TypeScript', 'JavaScript', 'SQL', 'Python', 'Java'] },
         { group: 'Frontend', items: ['Vue', 'Vuetify', 'Vite', 'Canvas/SVG'] },
-        { group: 'Backend', items: ['Node', 'PostgreSQL', 'REST'] },
-        { group: 'Practice', items: ['Testing', 'CI/CD', 'Accessibility'] },
+        { group: 'Backend', items: ['Node', 'MySQL', 'Redis'] },
+        { group: 'Process', items: ['Agile', 'CI/CD', 'Prompt Engineering'] },
     ],
 }
 

@@ -26,6 +26,7 @@
   --line-strong: rgba(236, 231, 221, 0.22);
   --accent: #2d56db;
   --accent-soft: rgba(255, 91, 46, 0.14);
+  --on-accent: #0d0d0c;
 
   --font-sans: 'Montserrat Variable', system-ui, sans-serif;
   --font-serif: 'Caveat', Georgia, serif;
@@ -37,6 +38,22 @@
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 
   color-scheme: dark;
+}
+
+/* Light theme ("paper"): the same tokens with the roles swapped, ink type on a warm
+   paper ground. useColorMode sets data-theme on <html>; without it dark stays the
+   default. Raised plates go lighter than the ground, like a sheet laid on a desk. */
+:root[data-theme='light'] {
+  --bg: #eeeae1;
+  --bg-raise: #f7f4ee;
+  --fg: #14130f;
+  --fg-muted: #5c584f;
+  --fg-dim: #857f73;
+  --line: rgba(20, 19, 15, 0.12);
+  --line-strong: rgba(20, 19, 15, 0.24);
+  --on-accent: #f7f4ee;
+
+  color-scheme: light;
 }
 
 /* ---------------------------------------------------------------- base */
@@ -76,7 +93,7 @@ a:not(.v-btn) {
 
 ::selection {
   background: var(--accent);
-  color: #0d0d0c;
+  color: var(--on-accent);
 }
 
 :focus-visible {
