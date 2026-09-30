@@ -4,12 +4,22 @@
     <link rel="stylesheet" href="/layers.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thomas Lim — Software engineer, Singapore</title>
+    <title>Thomas Lim, Technology Consultant, Singapore</title>
     <meta
       name="description"
       content="Thomas Lim is a software engineer in Singapore building web applications where the logic underneath has to be exactly right: tax calculators, ledgers and data pipelines."
     />
     <meta name="theme-color" content="#0d0d0c" />
+    <script>
+      // Dark is the default. Apply a saved light choice before first paint so it never
+      // flashes dark. Mirrors initialColorMode / applyColorMode in useColorMode.ts.
+      try {
+        if (localStorage.getItem('theme') === 'light') {
+          document.documentElement.dataset.theme = 'light'
+          document.querySelector('meta[name="theme-color"]').content = '#eeeae1'
+        }
+      } catch (e) {}
+    </script>
     <link
       rel="icon"
       type="image/svg+xml"
