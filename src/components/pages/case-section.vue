@@ -7,16 +7,12 @@
    * the body. Set `--cap` on the section to the body's cap-top offset (the
    * default suits 1.05rem body text at line-height 1.65).
    */
-  defineProps<{ index: string, label: string }>()
+  defineProps<{ label: string }>()
 </script>
 
 <template>
   <section v-reveal class="case-section grid-12">
-    <h2 class="case-section__label t-label">
-      <span>{{ index }}</span>
-      <span aria-hidden="true">&ensp;—&ensp;</span>
-      <span class="case-section__name">{{ label }}</span>
-    </h2>
+    <h2 class="case-section__label t-label" v-text="label"></h2>
     <div class="case-section__body">
       <slot />
     </div>
@@ -36,9 +32,6 @@
   position: sticky;
   top: calc(var(--header-h) + 28px);
   margin: calc(var(--cap) - 0.274rem) 0 0;
-}
-
-.case-section__name {
   color: var(--fg);
 }
 

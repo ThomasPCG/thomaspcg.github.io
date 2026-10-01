@@ -17,104 +17,120 @@
  */
 
 :root {
-  --bg: #0d0d0c;
-  --bg-raise: #141412;
-  --fg: #ece7dd;
-  --fg-muted: #9a958b;
-  --fg-dim: #5f5b54;
-  --line: rgba(236, 231, 221, 0.1);
-  --line-strong: rgba(236, 231, 221, 0.22);
-  --accent: #2d56db;
-  --accent-soft: rgba(255, 91, 46, 0.14);
-  --on-accent: #0d0d0c;
+    --bg: #eeeae1;
+    --bg-raise: #f7f4ee;
+    --fg: #14130f;
+    --fg-muted: #5c584f;
+    --fg-dim: #857f73;
+    --line: rgba(20, 19, 15, 0.12);
+    --line-strong: rgba(20, 19, 15, 0.24);
+    --accent: #2d56db;
+    --accent-soft: rgba(255, 91, 46, 0.14);
+    --on-accent: #f7f4ee;
 
-  --font-sans: 'Montserrat Variable', system-ui, sans-serif;
-  --font-serif: 'Caveat', Georgia, serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-sans: 'Montserrat Variable', system-ui, sans-serif;
+    --font-serif: 'Caveat', Georgia, serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    /* Vuetify's .text-* typography classes read these; without them they fall back to Roboto. */
+    --v-font-body: var(--font-sans);
+    --v-font-heading: var(--font-sans);
 
-  --gutter: clamp(20px, 4vw, 56px);
-  --maxw: 1360px;
-  --header-h: 72px;
-  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+    --gutter: clamp(20px, 4vw, 56px);
+    --maxw: 1360px;
+    --header-h: 72px;
+    --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 
-  color-scheme: dark;
+    color-scheme: light;
 }
 
-/* Light theme ("paper"): the same tokens with the roles swapped, ink type on a warm
-   paper ground. useColorMode sets data-theme on <html>; without it dark stays the
-   default. Raised plates go lighter than the ground, like a sheet laid on a desk. */
-:root[data-theme='light'] {
-  --bg: #eeeae1;
-  --bg-raise: #f7f4ee;
-  --fg: #14130f;
-  --fg-muted: #5c584f;
-  --fg-dim: #857f73;
-  --line: rgba(20, 19, 15, 0.12);
-  --line-strong: rgba(20, 19, 15, 0.24);
-  --on-accent: #f7f4ee;
+/* Dark theme ("ink"): the same tokens with the roles swapped, pale type on a near-black
+   ground. use-color-mode.ts sets data-theme on <html>; without it light stays the
+   default. Raised plates go lighter than the ground in both themes. */
+:root[data-theme='dark'] {
+    --bg: #0d0d0c;
+    --bg-raise: #141412;
+    --fg: #ece7dd;
+    --fg-muted: #9a958b;
+    --fg-dim: #5f5b54;
+    --line: rgba(236, 231, 221, 0.1);
+    --line-strong: rgba(236, 231, 221, 0.22);
+    --on-accent: #0d0d0c;
 
-  color-scheme: light;
+    color-scheme: dark;
 }
 
 /* ---------------------------------------------------------------- base */
 
 html {
-  background: var(--bg);
-  font-family: var(--font-sans);
-  scrollbar-color: var(--fg-dim) var(--bg);
-  scrollbar-width: thin;
+    background: var(--bg);
+    font-family: var(--font-sans);
+    scrollbar-color: var(--fg-dim) var(--bg);
+    scrollbar-width: thin;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.65;
-  text-rendering: optimizeLegibility;
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
 }
 
+/* The app is a transparent layer above the grain (body::after, z-index 0), so the
+   base colour lives on body/html and the grain sits on it, behind all content. */
 .v-application {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    color: var(--fg);
+    font-family: var(--font-sans);
 }
 
 :where(h1, h2, h3, h4, p, ul, ol, figure, blockquote, dl, dd) {
-  margin: 0;
+    margin: 0;
 }
 
 a:not(.v-btn) {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--on-accent);
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 :focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 3px;
+    outline: 1px solid var(--accent);
+    outline-offset: 3px;
 }
 
-/* Film grain. A noise tile is painted on a canvas at startup (see makeGrain in
-   main.ts) and exposed as --grain. Static, fixed and inert, so it never repaints.
+/* Film grain. A noise tile is painted on a canvas at startup and on every theme
+   change (see makeGrain in use-color-mode.ts) and exposed as --grain. Static, fixed and inert, so it never repaints.
+   It is the background layer only: z-index 0, under .v-application (z-index 1), so
+   text, cards and images render crisp above it.
    The tile is per-pixel random noise with balanced light and dark specks, so it
-   has no visible edge and does not lift the background. Kept faint: flat areas
-   should read as clean ink, not grit. */
+   has no visible edge and does not lift the background. Dark specks only show on
+   paper, so the light theme needs the layer much stronger than the ink theme,
+   where it was originally tuned. Kept faint: flat areas should read as clean
+   stock, not grit. */
 body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background-image: var(--grain, none);
-  background-size: 160px 160px;
-  background-repeat: repeat;
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: var(--grain, none);
+    background-size: 160px 160px;
+    background-repeat: repeat;
+    opacity: 0.65;
+}
+
+:root[data-theme='dark'] body::after {
+    opacity: 0.7;
 }
 
 /* ---------------------------------------------------------- typography */
@@ -122,231 +138,250 @@ body::after {
 .t-display,
 .t-h2,
 .t-h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  text-wrap: balance;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    text-wrap: balance;
 }
 
 .t-display {
-  font-size: clamp(3.25rem, 9vw, 9.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.02em;
+    font-size: clamp(3.25rem, 9vw, 9.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
 }
 
 /* Inner-page variant: Work index, About, 404 */
 .t-display--page {
-  font-size: clamp(3rem, 7vw, 6.5rem);
+    font-size: clamp(3rem, 7vw, 6.5rem);
 }
 
 .t-h2 {
-  font-size: clamp(2.25rem, 5vw, 4.5rem);
-  line-height: 1;
-  letter-spacing: -0.015em;
+    font-size: clamp(2.25rem, 5vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
 }
 
 .t-h3 {
-  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+    font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
 }
 
 .t-display em,
 .t-h2 em,
 .t-h3 em {
-  font-style: italic;
+    font-style: italic;
 }
 
 .t-label {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-muted);
 }
 
 .t-mono {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
 }
 
 .t-lead {
-  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--fg-muted);
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--fg-muted);
+}
+
+.t-small,
+.t-lead.t-small {
+    font-size: clamp(0.95rem, 1vw, 1rem);
+}
+
+.t-hover:hover,
+.t-lead.t-hover:hover {
+    color: var(--fg);
+}
+
+.no-select {
+    user-select: none;
 }
 
 .muted {
-  color: var(--fg-muted);
+    color: var(--fg-muted);
 }
 
 .dim {
-  color: var(--fg-dim);
+    color: var(--fg-dim);
 }
 
 .accent {
-  color: var(--accent);
+    color: var(--accent);
+}
+
+.accent-light {
+    color: color-mix(in srgb, var(--accent) 60%, white);
 }
 
 .measure {
-  max-width: 60ch;
+    max-width: 60ch;
 }
 
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* -------------------------------------------------------------- layout */
 
 .wrap {
-  width: 100%;
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
+    width: 100%;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
 }
 
 .grid-12 {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: clamp(16px, 2vw, 32px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(16px, 2vw, 32px);
 }
 
 @media (max-width: 759.98px) {
-  .grid-12 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+    .grid-12 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 
 .rule {
-  border-top: 1px solid var(--line);
+    border-top: 1px solid var(--line);
 }
 
 .section {
-  padding-block: clamp(96px, 14vw, 200px);
+    padding-block: clamp(96px, 14vw, 200px);
 }
 
 /* ---------------------------------------------------------------- links */
 
 .link-u {
-  padding-bottom: 0.12em;
-  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
-  transition: background-size 0.4s var(--ease);
+    padding-bottom: 0.12em;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.4s var(--ease);
 }
 
 .link-u:hover,
 .link-u:focus-visible {
-  background-size: 100% 1px;
+    background-size: 100% 1px;
 }
 
 /* ------------------------------------------------------------- buttons
    Vuetify's v-btn restyled as a small mono label in a square outline. */
 
 .v-btn {
-  --v-btn-height: 48px;
-  padding: 0 24px;
-  border-radius: 0;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition:
-    background-color 0.3s var(--ease),
-    color 0.3s var(--ease),
-    border-color 0.3s var(--ease);
+    --v-btn-height: 48px;
+    padding: 0 24px;
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+        background-color 0.3s var(--ease),
+        color 0.3s var(--ease),
+        border-color 0.3s var(--ease);
 }
 
 .v-btn--variant-outlined {
-  border: 1px solid var(--line-strong);
-  color: var(--fg);
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
 }
 
 .v-btn--variant-outlined:hover,
 .v-btn--variant-outlined:focus-visible {
-  border-color: var(--fg);
-  background: var(--fg);
-  color: var(--bg);
+    border-color: var(--fg);
+    background: var(--fg);
+    color: var(--bg);
 }
 
 .v-btn--variant-text {
-  min-width: 0;
-  padding: 0;
-  color: var(--fg-muted);
+    min-width: 0;
+    padding: 0;
+    color: var(--fg-muted);
 }
 
 .v-btn--variant-text:hover,
 .v-btn--variant-text:focus-visible {
-  color: var(--fg);
+    color: var(--fg);
 }
 
 /* The fill transition replaces Vuetify's state overlay. */
 .v-btn .v-btn__overlay,
 .v-btn .v-btn__underlay {
-  display: none;
+    display: none;
 }
 
 /* --------------------------------------------------------------- motion */
 
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 900ms var(--ease) var(--d, 0ms),
-    transform 900ms var(--ease) var(--d, 0ms);
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 900ms var(--ease) var(--d, 0ms),
+        transform 900ms var(--ease) var(--d, 0ms);
 }
 
 .reveal.is-in {
-  opacity: 1;
-  transform: none;
+    opacity: 1;
+    transform: none;
 }
 
 /* <router-view> page transition: fade out, then fade in with a 12px rise. */
 .page-enter-active,
 .page-leave-active {
-  transition:
-    opacity 300ms var(--ease),
-    transform 300ms var(--ease);
+    transition:
+        opacity 300ms var(--ease),
+        transform 300ms var(--ease);
 }
 
 .page-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
+    opacity: 0;
+    transform: translateY(12px);
 }
 
 .page-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
-    scroll-behavior: auto !important;
-  }
 
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
+    }
 
-  .page-enter-from {
-    transform: none;
-  }
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .page-enter-from {
+        transform: none;
+    }
 }

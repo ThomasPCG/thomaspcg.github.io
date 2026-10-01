@@ -7,7 +7,7 @@
  * Inline emphasis: a word wrapped in *asterisks* (see Settlement Desk) is
  * meant to be rendered in italics by whichever view prints the string.
  */
-
+export type GlyphKind = 'ledger' | 'tiers' | 'graph' | 'form' | 'notes';
 export const site = {
     name: 'Thomas Lim',
     role: 'Technology Consultant',
@@ -18,14 +18,14 @@ export const site = {
     company: 'https://www.pacificconsultinggroup.com',
     availability: 'Available for Projects Q1 2027',
     title: `
-    <span class="line" style="--i: 0">
-        <span class="line__in">Creating Software</span></span>
-        <span class="line" style="--i: 1"><span class="line__in">with <em class="accent">Super</em></span></span>
-        <span class="line" style="--i: 2"><span class="line__in">Intelligence</span>
+    <div class="line">
+        <div class="line__in">Build</div>
+        <div class="line__in accent">Better</div>
+        <div class="line__in">Software</div>    
+    </div>
     `
 }
-
-export type GlyphKind = 'ledger' | 'tiers' | 'graph' | 'form' | 'notes'
+export const heroLead = `I design and build <span class="accent">applications</span>`;
 
 export interface Project {
     slug: string
@@ -37,7 +37,6 @@ export interface Project {
     glyph: GlyphKind
     featured: boolean
     summary: string
-    intro: string
     problem: string
     approach: string[]
     outcome: string
@@ -106,49 +105,45 @@ export const projects: Project[] = [
     //     ],
     //     outcome: 'Triage starts from a picture instead of a log file.',
     // },
-    // // PLACEHOLDER — replace with real work
     // {
-    //     slug: 'fieldbook',
-    //     title: 'Fieldbook',
-    //     year: 2022,
-    //     kind: 'Mobile web app',
-    //     role: 'Full-stack engineer',
-    //     stack: ['Vue', 'IndexedDB', 'Service Worker', 'Node'],
+    //     slug: 'production-scheduler',
+    //     title: 'Production Scheduler',
+    //     year: 2018,
+    //     kind: 'Manufacturing Resource Planning (MRP II)',
+    //     role: 'Architect',
+    //     stack: ['NodeJS', 'Redis', 'MySQL', 'Informix'],
     //     glyph: 'form',
-    //     featured: false,
-    //     summary: 'Offline-first inspection forms for technicians working in plant rooms with no signal.',
-    //     intro: 'Offline-first inspection forms for technicians working in plant rooms with no signal.',
-    //     problem: 'Technicians lost submissions whenever connectivity dropped mid-form.',
+    //     featured: true,
+    //     summary: 'A manufacturing resource planning application that works.',
+    //     problem: "A quick scratchpad shouldn't need a sign-up.",
     //     approach: [
-    //         'Every keystroke is saved to IndexedDB.',
-    //         'A sync queue retries with backoff and resolves conflicts per field.',
-    //         'Forms are defined in JSON so supervisors can add a checklist without a release.',
+    //         'Transform huge legacy excel into a modular manufacutring planning system.',
+    //         'Three distinct modules that drive the planning, production and procurement processes.',
+    //         'Automatic BOM explosion and plan generation',
     //     ],
-    //     outcome: 'Lost submissions stopped being a support category.',
+    //     outcome: 'A small, durable tool, and an early lesson in treating stored HTML as untrusted.',
     // },
     {
-        slug: 'production-scheduler',
-        title: 'Production Scheduler',
-        year: 2018,
-        kind: 'Manufacturing Resource Planning (MRP II)',
-        role: 'Architect',
-        stack: ['NodeJS', 'Redis', 'MySQL', 'Informix'],
+        slug: 'scribble',
+        title: 'Scribble',
+        year: 2020,
+        kind: 'Rich Text Notes',
+        role: 'Developer',
+        stack: ['Vue', 'Tiptap', 'localStorage'],
         glyph: 'notes',
         featured: true,
-        summary: 'A manufacturing resource planning application that works.',
-        intro: 'A manufacturing tool',
+        summary: 'A rich-text notepad that keeps everything in the browser, with no account or server required. Useful for mental notes throughout the day without "saving" to the cloud or creating an account just to note my TODOs.',
         problem: "A quick scratchpad shouldn't need a sign-up.",
         approach: [
-            'Transform huge legacy excel into a modular manufacutring planning system.',
-            'Three distinct modules that drive the planning, production and procurement processes.',
-            'Automatic BOM explosion and plan generation',
+            'Rich text editor => Tiptap has modern support on Vue stack and is open source.',
+            'Notes are saved on request and stored in browser\'s localStorage.',
+            'Stored notes are validated on load, so a stale entry won\'t break the list.',
         ],
-        outcome: 'A small, durable tool, and an early lesson in treating stored HTML as untrusted.',
+        outcome: 'A small, durable tool that works right on the browser.',
     },
 ]
 
 export interface Capability {
-    index: string
     title: string
     description: string
     items: string[]
@@ -156,64 +151,66 @@ export interface Capability {
 
 export const capabilities: Capability[] = [
     {
-        index: '01',
-        title: 'Interface engineering',
-        description: 'Component systems in Vue and TypeScript, accessible from the first commit and tested with a keyboard.',
-        items: ['Vue 3 / Vuetify', 'TypeScript', 'Design systems', 'WCAG 2.2'],
+        title: 'Intelligence<br/>Engineering',
+        description: 'Architecting context-aware AI systems through specialized skills design, robust retrieval-augmented generation (RAG), and seamless Model Context Protocol (MCP) integrations',
+        items: ['Skills Design', 'Retrieval-Augmented Generation', 'Model Context Protocol'],
     },
     {
-        index: '02',
-        title: 'Application logic',
-        description:
-            'Domain rules — tax, pricing, reconciliation — modelled as data, so the interface can explain every number.',
-        items: ['Domain modelling', 'Calculation engines', 'Property-based tests'],
+        title: "Solutions<br/>Consulting",
+        description: "Partnering with stakeholders to define requirements, build rapid proofs of concept, and deliver tailored technical strategies for your organisation.",
+        items: ["Requirements Gathering", "Proof of Concept (PoC)", "Technical Strategy"]
     },
     {
-        index: '03',
-        title: 'Data-heavy interfaces',
-        description: 'Tables, timelines and graphs that stay responsive at tens of thousands of rows.',
-        items: ['Virtualisation', 'Web Workers', 'Canvas & SVG'],
+        title: 'Cloud<br/>Architect',
+        description: 'Building resilient cloud environments through scalable cloud resource provisioning, advanced threat defense integration, and robust edge security routing.',
+        items: ['Cloud Resources Management', 'Edge Security', 'Threat Defense'],
     },
     {
-        index: '04',
-        title: 'Delivery',
-        description: 'Small, reviewable changes shipped continuously, with the documentation written alongside.',
-        items: ['CI/CD', 'Performance budgets', 'Technical writing'],
+        title: 'Software<br/>Development',
+        description: 'Architecting and building scalable web, mobile, and desktop applications powered by robust Node.js and Java backends.',
+        items: ['Cross-Platform Apps', 'Node.js', 'Java'],
+    },
+    {
+        title: 'UX<br/>Design',
+        description: 'Crafting intuitive and accessible user interfaces, using modern frontend frameworks with strict type safety and scalable component libraries.',
+        items: ['Vue Stack', 'ES2026', 'Design Systems'],
+    },
+    {
+        title: 'Application<br/>Delivery',
+        description: 'Shipping resilient features continuously through automated release pipelines, strict frontend performance budgets, and comprehensive technical docs.',
+        items: ['CI/CD Pipelines', 'Performance Budgets', 'Technical Writing'],
     },
 ]
 
-// PLACEHOLDER — replace with a real biography
 export const about = {
-    intro: "I'm Thomas, a technology consultant from Singapore. I've spent the last decade building the parts of products that other people have to trust: calculations, ledgers, the screens where an operator decides whether something is wrong.",
-    body: 'I care about interfaces that explain themselves, code that the next person can read, and shipping in small pieces. Outside work I build small browser tools, mostly to understand a problem properly.',
+    intro: `I'm <span class="accent-light">Thomas</span>, a technology consultant from Singapore.`,
+    body: `I've spent the last decade building software for startups, scale-ups, and established enterprises across the region, from early-stage products that needed to ship fast to large systems that needed to run reliably for years. Along the way I've worked across the full stack: designing APIs, building cloud-native platforms, and untangling legacy codebases that teams had learned to fear. What keeps me interested is the point where a business problem meets an engineering decision, and I care as much about whether a system solves the right problem as about whether it's built well.
+    <div class="mt-8">Today, I work with founders and technology leaders as both a hands-on developer and an advisor. Some engagements start with a architecture review or a technical roadmap, and others have me embedded in a team writing code alongside them. I favour simple, maintainable solutions over clever ones, and I'm direct about trade-offs so that decisions about cost, speed, and risk are made with clear eyes. If you're building something new, modernising something old, or just need a second opinion from someone who has seen a lot of projects succeed and fail, I'd love to hear from you.</div>`,
     principles: [
         {
-            title: 'Make the logic visible',
-            text: 'If a number can surprise someone, the interface should show how it was reached.',
+            title: 'Think clearly. Code cleanly.',
+            text: 'Code is read far more often than it is written. Clear naming and simple structure keeps a codebase easy to maintain in the long run.',
         },
         {
-            title: 'Embrace boring foundations',
-            text: 'Well-understood tools leave more attention for the actual problem.',
+            title: 'Embrace boring. Scale on solid ground.',
+            text: 'Proven tools and well-understood patterns let teams spend their effort on the product, not on debugging the stack.',
         },
         {
-            title: 'Ship in small pieces',
+            title: 'Ship small. Ship fast.',
             text: 'Small changes are easier to review, easier to revert, and arrive sooner.',
         },
     ],
-    // PLACEHOLDER — replace with real experience
     experience: [
-        { years: '2023 — Now', role: 'Senior Software Engineer', context: 'Payments infrastructure, Singapore' },
-        { years: '2019 — 2023', role: 'Software Engineer', context: 'Logistics platform' },
-        { years: '2016 — 2019', role: 'Web Developer', context: 'Digital studio' },
+        { years: '2017 — Now', role: 'Technology Consultant', context: 'Pacific Consulting Group' },
+        { years: '2015 — 2016', role: 'Software Engineer', context: 'Accenture' },
     ],
     toolkit: [
-        { group: 'Languages', items: ['TypeScript', 'JavaScript', 'SQL', 'Python', 'Java'] },
-        { group: 'Frontend', items: ['Vue', 'Vuetify', 'Vite', 'Canvas/SVG'] },
-        { group: 'Backend', items: ['Node', 'MySQL', 'Redis'] },
+        { group: 'Languages', items: ['Markdown', 'JS/TS', 'SQL', 'Java', 'Python'] },
+        { group: 'Frontend', items: ['Vuetify', 'Tailwind', 'Material Design', 'd3'] },
+        { group: 'Backend', items: ['Node', 'MySQL', 'Redis', 'pm2'] },
         { group: 'Process', items: ['Agile', 'CI/CD', 'Prompt Engineering'] },
     ],
 }
 
-export const heroLead = `I design and build applications with assistance from <span class="accent">Super</span> Intelligence.`;
-
-export const colophon = `designed and reviewed by me. coded by claude agents. <div>typeset with <span class="accent">Caveat</span>, <span class="accent">JetBrains Mono Variable</span> & <span class="accent">Montserrat</span></div>`
+export const colophon = `designed and reviewed by me. coded by claude agents. <div>typeset with <span class="accent">Caveat</span>, 
+<span class="accent">JetBrains Mono</span> & <span class="accent">Montserrat</span></div>`

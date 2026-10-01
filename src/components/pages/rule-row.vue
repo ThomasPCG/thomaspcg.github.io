@@ -12,7 +12,7 @@
 
 <template>
   <li v-reveal class="rule-row grid-12">
-    <div class="rule-row__a t-label"><slot name="a" /></div>
+    <div class="rule-row__a"><slot name="a" /></div>
     <div class="rule-row__b"><slot name="b" /></div>
     <div class="rule-row__c"><slot name="c" /></div>
   </li>
@@ -38,7 +38,7 @@
 }
 
 .rule-row__a {
-  grid-column: 1 / span 3;
+  grid-column: 1 / span 2;
   margin-top: calc(var(--rr-title) * 0.17 - 0.274rem);
   color: var(--fg-muted);
   transition: color 0.3s var(--ease);
@@ -49,11 +49,11 @@
 }
 
 .rule-row__b {
-  grid-column: 4 / span 4;
+  grid-column: 3 / span 4;
 }
 
 .rule-row__c {
-  grid-column: 8 / span 4;
+  grid-column: 7 / span 5;
   margin-top: calc(var(--rr-title) * 0.17 - 0.406rem);
   font-size: 0.9375rem;
   line-height: 1.55;

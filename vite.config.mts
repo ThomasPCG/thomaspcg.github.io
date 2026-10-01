@@ -23,7 +23,7 @@ function multiPage(): Plugin {
                 about: 'Thomas Lim',
             }
             for (const p of projects) {
-                pages[`work/${p.slug}`] = `${p.title} — Thomas Lim`
+                pages[`work/${p.slug}`] = `${p.title} by Thomas Lim`
             }
             for (const [route, title] of Object.entries(pages)) {
                 mkdirSync(`${outDir}/${route}`, { recursive: true })

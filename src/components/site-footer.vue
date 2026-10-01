@@ -4,7 +4,7 @@
    */
   import { onBeforeUnmount, onMounted, ref } from 'vue'
   import { colophon, site } from '@/data/content'
-  import ArrowIcon from './ArrowIcon.vue'
+  import ArrowIcon from './arrow-icon.vue'
 
   // ---- Singapore clock ------------------------------------------------------
   const clock = new Intl.DateTimeFormat('en-GB', {
@@ -59,7 +59,7 @@
 
       <!-- Label in cols 1-3, content from col 4: the same column rule as the rest of the site. -->
       <div class="footer__body grid-12">
-        <p class="footer__label t-label">&mdash;&ensp;Contact</p>
+        <p class="footer__label t-label">Contact</p>
 
         <h2 v-reveal class="footer__pitch t-display">
           Let&rsquo;s Make <span class="accent">Great</span> Things <em>Together</em>.
@@ -67,7 +67,7 @@
 
         <div v-reveal="120" class="footer__mail-zone" @pointerleave="release" @pointermove="pull">
           <a ref="mail" class="footer__mail link-u" :href="`mailto:${site.email}`">
-            {{ site.email }}
+            <span v-text="site.email"></span>
             <ArrowIcon dir="up-right" />
           </a>
         </div>
@@ -75,13 +75,13 @@
 
       <div class="footer__meta rule">
         <div class="grid-12 footer__row t-label">
-          <p class="footer__copy">&copy; 2026 {{ site.name }}</p>
+          <p class="footer__copy">&copy; 2026 <span v-text="site.name"></span></p>
           <a class="footer__link link-u" :href="site.github" rel="noopener" target="_blank">
             GitHub
             <ArrowIcon dir="up-right" />
           </a>
           <p class="footer__clock">
-            <time>{{ time }}</time> SGT
+            <time v-text="time"></time> SGT
           </p>
           <button class="footer__top link-u" type="button" @click="toTop">
             Back to top

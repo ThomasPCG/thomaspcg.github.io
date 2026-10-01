@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  /** 404. Also rendered by ProjectView for an unknown case-study slug. */
+  /** 404. Also rendered by project-view.vue for an unknown case-study slug. */
   import { useRoute } from 'vue-router'
-  import ArrowIcon from '@/components/ArrowIcon.vue'
+  import ArrowIcon from '@/components/arrow-icon.vue'
 
   // Read once: the path must not change while the page fades out.
   const path = useRoute().fullPath
@@ -24,7 +24,7 @@
       <p v-reveal="200" class="nf__line t-h2"><em>Nothing computes here.</em></p>
 
       <div v-reveal="320" class="nf__aside">
-        <p class="nf__path t-mono muted">{{ path }}</p>
+        <p class="nf__path t-mono muted" v-text="path"></p>
         <nav class="nf__links">
           <RouterLink class="nf__link link-u" to="/"><ArrowIcon dir="left" /> Back to home</RouterLink>
           <RouterLink class="nf__link link-u muted" to="/work">Browse the work <ArrowIcon dir="right" /></RouterLink>

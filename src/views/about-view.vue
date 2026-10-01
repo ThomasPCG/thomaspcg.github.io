@@ -1,10 +1,10 @@
 <script setup lang="ts">
     /** About: intro, principles, experience and toolkit, in the same rhythm as the front page. */
-    import ArrowIcon from '@/components/ArrowIcon.vue'
-    import Emphasis from '@/components/pages/Emphasis.vue'
-    import PageHeader from '@/components/pages/PageHeader.vue'
-    import RuleRow from '@/components/pages/RuleRow.vue'
-    import SectionHead from '@/components/SectionHead.vue'
+    import ArrowIcon from '@/components/arrow-icon.vue'
+    import Emphasis from '@/components/pages/emphasis.vue'
+    import PageHeader from '@/components/pages/page-header.vue'
+    import RuleRow from '@/components/pages/rule-row.vue'
+    import SectionHead from '@/components/section-head.vue'
     import { about, site } from '@/data/content'
 
     const pad = (n: number) => String(n).padStart(2, '0')
@@ -12,29 +12,24 @@
 
 <template>
     <div class="about">
-        <PageHeader label="About" :meta="site.location">
-            {{ site.name }}
+        <PageHeader label="About" :meta="site.name">
             <template #lead>
-                <p class="t-lead">
-                    <Emphasis :text="about.intro" />
-                </p>
-                <p class="about__body t-lead">
-                    <Emphasis :text="about.body" />
-                </p>
+                <h3 class="t-h3" v-html="about.intro"></h3>
+                <div class="mt-8 t-lead t-hover t-small no-select" v-html="about.body"></div>
             </template>
             <template #aside>
                 <dl class="facts">
                     <div class="facts__row">
                         <dt class="t-label">Role</dt>
-                        <dd>{{ site.role }}</dd>
+                        <dd v-text="site.role"></dd>
                     </div>
                     <div class="facts__row">
                         <dt class="t-label">Based in</dt>
-                        <dd>{{ site.location }}</dd>
+                        <dd v-text="site.location"></dd>
                     </div>
                     <div class="facts__row">
                         <dt class="t-label">Status</dt>
-                        <dd><span class="facts__dot" aria-hidden="true" />{{ site.availability }}</dd>
+                        <dd><span class="facts__dot" aria-hidden="true" /><span v-text="site.availability"></span></dd>
                     </div>
                     <div class="facts__row">
                         <dt class="t-label">Elsewhere</dt>
@@ -54,43 +49,47 @@
         </PageHeader>
 
         <section class="wrap about__section">
-            <SectionHead index="01" title="Principles" meta="How I work" />
+            <SectionHead title="Principles" meta="How I work" />
             <ol class="table">
                 <RuleRow v-for="(item, i) in about.principles" :key="item.title">
                     <template #a>
                         <div v-text="pad(i + 1)"></div>
                     </template>
                     <template #b>
-                        <h3 class="t-h3" v-text="item.title"></h3>
+                        <h3 class="t-h3 muted t-hover no-select" v-text="item.title"></h3>
                     </template>
                     <template #c>
-                        <div v-text="item.text"></div>
+                        <div class="muted t-hover no-select" v-text="item.text"></div>
                     </template>
                 </RuleRow>
             </ol>
         </section>
 
         <section class="wrap about__section">
-            <SectionHead index="02" title="Experience" meta="Most recent first" />
+            <SectionHead title="Experience" meta="Jobs Done" />
             <ol class="table">
                 <RuleRow v-for="job in about.experience" :key="job.years">
-                    <template #a>{{ job.years }}</template>
-                    <template #b>
-                        <h3 class="t-h3">{{ job.role }}</h3>
+                    <template #a>
+                        <span v-text="job.years"></span>
                     </template>
-                    <template #c>{{ job.context }}</template>
+                    <template #b>
+                        <h3 class="t-h3" v-text="job.role"></h3>
+                    </template>
+                    <template #c>
+                        <span v-text="job.context"></span>
+                    </template>
                 </RuleRow>
             </ol>
         </section>
 
         <section class="wrap about__section about__section--last">
-            <SectionHead index="03" title="Toolkit" meta="Day to day" />
+            <SectionHead title="Toolkit" meta="My Favourites" />
             <ul class="toolkit">
                 <li v-for="(group, i) in about.toolkit" :key="group.group" v-reveal="i * 90"
                     class="toolkit__row grid-12">
-                    <h3 class="toolkit__name t-label">{{ group.group }}</h3>
+                    <h3 class="toolkit__name t-label" v-text="group.group"></h3>
                     <ul class="toolkit__items t-mono">
-                        <li v-for="item in group.items" :key="item">{{ item }}</li>
+                        <li v-for="item in group.items" :key="item" v-text="item"></li>
                     </ul>
                 </li>
             </ul>
@@ -102,9 +101,6 @@
 
     /* The second paragraph is set exactly like the lead: same size, weight and
    measure, one column. */
-    .about__body {
-        margin-top: 1em;
-    }
 
     /* --------------------------------------------------------- facts (aside) */
     .facts {

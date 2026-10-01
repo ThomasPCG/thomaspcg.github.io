@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import SiteFooter from '@/components/SiteFooter.vue'
-  import SiteHeader from '@/components/SiteHeader.vue'
+  import SiteFooter from '@/components/site-footer.vue'
+  import SiteHeader from '@/components/site-header.vue'
 </script>
 
 <template>

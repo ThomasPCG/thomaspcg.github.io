@@ -10,8 +10,8 @@
      * caption hangs below it on clean ground. On mobile the plate becomes a
      * quiet backdrop behind the text, clipped to the hero.
      */
-    import ArrowIcon from '@/components/ArrowIcon.vue'
-    import SystemCanvas from '@/components/SystemCanvas.vue'
+    import ArrowIcon from '@/components/arrow-icon.vue'
+    import SystemCanvas from '@/components/system-canvas.vue'
     import { heroLead, site } from '@/data/content'
 </script>
 
@@ -19,15 +19,18 @@
     <section aria-labelledby="hero-title" class="hero">
         <div class="wrap hero__inner">
             <div class="hero__meta grid-12 t-label">
-                <p class="hero__meta-a">{{ site.name }} — {{ site.role }}</p>
-                <p class="hero__meta-b">{{ site.location }} · {{ site.coords }}</p>
-                <p class="hero__meta-c">
-                    Humble Employee at 
+                <div class="hero__meta-a d-flex flex-row ga-2">
+                    <span v-text="site.role"></span> ·
+                    <span v-text="site.location"></span> ·
+                    <span v-text="site.coords"></span>
+                </div>
+                <div class="hero__meta-c">
+                    Employee at
                     <a class="hero__ext link-u" :href="site.company" rel="noopener" target="_blank">
                         Pacific Consulting Group
                         <ArrowIcon dir="up-right" />
                     </a>
-                </p>
+                </div>
             </div>
 
             <div class="hero__main grid-12">
@@ -60,7 +63,7 @@
 
                 <p v-reveal="240" class="hero__avail t-label">
                     <span aria-hidden="true" class="hero__dot" />
-                    <span>{{ site.availability }}</span>
+                    <span v-text="site.availability"></span>
                 </p>
             </div>
         </div>
@@ -163,19 +166,31 @@
 
     /* Each line is a clipping window; the text rises into it. The padding gives
    ascenders, descenders and italic overhang room inside the clip. */
-    .line {
+    /* The title is injected with v-html, so its elements never receive the
+   scoped data-v attribute. :deep() keeps the selectors from requiring it. */
+    .hero__title :deep(.line) {
         display: block;
         padding: 0.14em 0.12em 0.16em 0;
         margin: -0.14em -0.12em -0.16em 0;
         overflow: hidden;
     }
 
-    .line__in {
+    .hero__title :deep(.line__in) {
+        --i: 0;
         display: block;
         animation: rise 1.2s var(--ease) calc(0.25s + var(--i) * 0.13s) both;
     }
 
-    .hero__title .accent {
+    /* The markup carries no per-line index, so stagger by position. */
+    .hero__title :deep(.line__in:nth-child(2)) {
+        --i: 1;
+    }
+
+    .hero__title :deep(.line__in:nth-child(3)) {
+        --i: 2;
+    }
+
+    .hero__title :deep(.accent) {
         /* The one place the accent lands in the headline. */
         display: inline-block;
     }
@@ -384,7 +399,7 @@
         .hero__canvas-in,
         .hero__meta,
         .hero__meta::after,
-        .line__in,
+        .hero__title :deep(.line__in),
         .tick,
         .hero__caption {
             animation: none;

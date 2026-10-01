@@ -19,14 +19,14 @@ Scaffolded with Vuetify CLI.
 ## 🧭 Start Here
 
 - Main entry: `src/main.ts`
-- Main app component: `src/App.vue`
+- Main app component: `src/app.vue`
 - Main styles: `src/styles/`
 - Plugin setup: `src/plugins/`
 
 ## 📁 Project Structure
 
 - `src/main.ts` — application entry point
-- `src/App.vue` — root component
+- `src/app.vue` — root component
 - `src/components/` — reusable Vue components
 - `src/plugins/` — plugin registration and setup
 - `src/styles/` — global styles and theme settings

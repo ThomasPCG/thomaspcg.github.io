@@ -8,7 +8,7 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { projects } from '@/data/content'
 
-const SITE_TITLE = 'Thomas Lim — Software engineer, Singapore'
+const SITE_TITLE = 'Thomas Lim'
 
 // An unknown case-study slug renders the 404 view, keeping the URL as typed.
 function knownProject (to: RouteLocationNormalized) {
@@ -24,30 +24,30 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('@/views/HomeView.vue'),
+      component: () => import('@/views/home-view.vue'),
     },
     {
       path: '/work',
       name: 'work',
-      component: () => import('@/views/WorkView.vue'),
+      component: () => import('@/views/work-view.vue'),
       meta: { title: 'Work' },
     },
     {
       path: '/work/:slug',
       name: 'project',
-      component: () => import('@/views/ProjectView.vue'),
+      component: () => import('@/views/project-view.vue'),
       beforeEnter: knownProject,
     },
     {
       path: '/about',
       name: 'about',
-      component: () => import('@/views/AboutView.vue'),
+      component: () => import('@/views/about-view.vue'),
       meta: { title: 'About' },
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
-      component: () => import('@/views/NotFoundView.vue'),
+      component: () => import('@/views/not-found-view.vue'),
       meta: { title: 'Page not found' },
     },
   ],

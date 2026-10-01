@@ -10,7 +10,7 @@
 import { watch } from 'vue'
 import { createVuetify } from 'vuetify'
 import 'vuetify/styles'
-import { applyColorMode, initialColorMode, modeFor, themeNameFor } from '@/composables/useColorMode'
+import { applyColorMode, initialColorMode, modeFor, themeNameFor } from '@/composables/use-color-mode'
 
 const initial = initialColorMode()
 

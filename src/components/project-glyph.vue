@@ -485,13 +485,20 @@
     :style="{ '--fs': `${sheet.fs}px` }"
     :viewBox="`0 0 ${sheet.w} ${sheet.h}`"
   >
-    <component
-      :is="prim.tag"
-      v-for="(prim, i) in prims"
-      :key="i"
-      v-bind="prim.attrs"
-      :class="prim.cls || undefined"
-    >{{ prim.text }}</component>
+    <template v-for="(prim, i) in prims" :key="i">
+      <text
+        v-if="prim.tag === 'text'"
+        v-bind="prim.attrs"
+        :class="prim.cls || undefined"
+        v-text="prim.text"
+      ></text>
+      <component
+        :is="prim.tag"
+        v-else
+        v-bind="prim.attrs"
+        :class="prim.cls || undefined"
+      />
+    </template>
   </svg>
 </template>
 

@@ -9,14 +9,15 @@
       name="description"
       content="Thomas Lim is a software engineer in Singapore building web applications where the logic underneath has to be exactly right: tax calculators, ledgers and data pipelines."
     />
-    <meta name="theme-color" content="#0d0d0c" />
+    <meta name="theme-color" content="#eeeae1" />
     <script>
-      // Dark is the default. Apply a saved light choice before first paint so it never
-      // flashes dark. Mirrors initialColorMode / applyColorMode in useColorMode.ts.
+      // Light is the default. Apply a saved dark choice (preferences.theme) before first
+      // paint so it never flashes light. Mirrors initialColorMode / applyColorMode in
+      // use-color-mode.ts.
       try {
-        if (localStorage.getItem('theme') === 'light') {
-          document.documentElement.dataset.theme = 'light'
-          document.querySelector('meta[name="theme-color"]').content = '#eeeae1'
+        if (JSON.parse(localStorage.getItem('preferences')).theme === 'dark') {
+          document.documentElement.dataset.theme = 'dark'
+          document.querySelector('meta[name="theme-color"]').content = '#0d0d0c'
         }
       } catch (e) {}
     </script>

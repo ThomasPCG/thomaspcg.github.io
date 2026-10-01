@@ -2,11 +2,11 @@
   /**
    * Header button that flips between the dark (ink) and light (paper) themes.
    * The glyph is a ring with one half filled, drawn on a 16px grid with the same
-   * 1.25px stroke as ArrowIcon, and turns half a revolution on each switch. The
+   * 1.25px stroke as arrow-icon.vue, and turns half a revolution on each switch. The
    * theme change radiates from the button (see useColorMode).
    */
   import { computed } from 'vue'
-  import { useColorMode } from '@/composables/useColorMode'
+  import { useColorMode } from '@/composables/use-color-mode'
 
   const { mode, toggle } = useColorMode()
 
